@@ -46,13 +46,19 @@ class Play extends Phaser.Scene {
             fixedWidth: 100
         }
         this.scoreLeft = this.add.text(10, 10, score + "$", scoreConfig);
+        this.hsRight = this.add.text(game.config.width-150, 10, "HS:" + highScore, scoreConfig);
 
         // Add extra keys
         this.keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 
     }
 
     update(){
+        if(score > highScore) {
+            highScore = score;
+        }
+
         // End game check
         if(gameOver){
             this.gameisover();
@@ -83,13 +89,20 @@ class Play extends Phaser.Scene {
             this.cameras.main.shake(100, 0.01);
         }
 
-         // check key input for restart
-         if (gameOver && Phaser.Input.Keyboard.JustDown(this.keyR)){
+        // check key input for restart
+        if (gameOver && Phaser.Input.Keyboard.JustDown(this.keyR)){
             score = 0;
             distance = 0;
             gameOver = false;
             this.didEndGame = false;
             this.scene.restart();
+        }
+        else if (gameOver && Phaser.Input.Keyboard.JustDown(this.keyM)) {
+            score = 0;
+            distance = 0;
+            gameOver = false;
+            this.didEndGame = false;
+            this.scene.start('menuScene');
         }
     }
 
